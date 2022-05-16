@@ -1,5 +1,7 @@
 namespace SpriteKind {
     export const misc = SpriteKind.create()
+    export const NPC = SpriteKind.create()
+    export const potForSoup = SpriteKind.create()
 }
 controller.combos.attachCombo("a + b", function () {
     if (initStart == 0) {
@@ -9,7 +11,27 @@ controller.combos.attachCombo("a + b", function () {
     }
 })
 function mainFunc () {
-    scene.setBackgroundColor(0)
+    tiles.setCurrentTilemap(tilemap`level1`)
+    leCook = sprites.create(img`
+        . . . . 1 1 1 1 1 1 1 1 . . . . 
+        . . . . . 1 1 1 1 1 1 . . . . . 
+        . . . . . 1 1 1 1 1 1 . . . . . 
+        . . . . . 4 4 4 4 4 4 . . . . . 
+        . . . . . 4 4 4 4 4 4 . . . . . 
+        . . . . . 4 4 4 4 4 4 . . . . . 
+        . . . . . 4 4 4 4 4 4 . . . . . 
+        . . . . 1 1 1 1 1 1 1 1 . . . . 
+        . . . 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . . 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . . 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . . 1 1 1 1 1 1 1 1 1 1 . . . 
+        . . . . 1 1 1 1 1 1 1 1 . . . . 
+        . . . . . c c c c c c . . . . . 
+        . . . . . . c c c c . . . . . . 
+        . . . . f f f f f f f f . . . . 
+        `, SpriteKind.Player)
+    tiles.placeOnTile(leCook, tiles.getTileLocation(10, 8))
+    foodThingy()
 }
 function startScreen () {
     initStart = 0
@@ -34,6 +56,35 @@ function startScreen () {
     scene.setBackgroundColor(4)
     startButton.setPosition(scene.screenWidth() / 2, scene.screenHeight() - 20)
 }
+function foodThingy () {
+    if (controller.A.isPressed() && leCook.tileKindAt(TileDirection.Top, assets.tile`myTile`)) {
+        onionOne = sprites.create(img`
+            . . . . d . . . . . . d . . . . 
+            . . . . d d . . . . d d . . . . 
+            . . . . . . d d d d . . . . . . 
+            . . . . . d d d d d d . . . . . 
+            . . . . d d b d d b d d . . . . 
+            . . . d d d b d d b d d d . . . 
+            . . . d d b d d d d b d d . . . 
+            . . d d d b d d d d b d d d . . 
+            . . d d d b d d d d b d d d . . 
+            . . d d b d d d d d d b d d . . 
+            . . d d b d d b b d d b d d . . 
+            . . d d b d d b b d d b d d . . 
+            . . d d b d d b b d d b d d . . 
+            . . d d b d d b b d d b d d . . 
+            . . d d b d d b b d d b d d . . 
+            . . . d b d d d d d d b d . . . 
+            `, SpriteKind.Food)
+        onionOne.follow(leCook)
+    }
+}
+let onionOne: Sprite = null
+let leCook: Sprite = null
 let startButton: Sprite = null
 let initStart = 0
 startScreen()
+game.onUpdate(function () {
+    scene.cameraFollowSprite(leCook)
+    controller.moveSprite(leCook)
+})
