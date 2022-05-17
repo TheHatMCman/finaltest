@@ -11,6 +11,8 @@ controller.combos.attachCombo("a + b", function () {
     }
 })
 function mainFunc () {
+    rawIngredients = ["onion", "mushroom", "tomato"]
+    levelStart = 1
     tiles.setCurrentTilemap(tilemap`level1`)
     leCook = sprites.create(img`
         . . . . 1 1 1 1 1 1 1 1 . . . . 
@@ -30,10 +32,13 @@ function mainFunc () {
         . . . . . . c c c c . . . . . . 
         . . . . f f f f f f f f . . . . 
         `, SpriteKind.Player)
+    game.showLongText("Make Good Food", DialogLayout.Bottom)
+    info.startCountdown(300)
     tiles.placeOnTile(leCook, tiles.getTileLocation(10, 8))
     foodThingy()
 }
 function startScreen () {
+    levelStart = 0
     initStart = 0
     startButton = sprites.create(img`
         ..............................................................
@@ -57,34 +62,25 @@ function startScreen () {
     startButton.setPosition(scene.screenWidth() / 2, scene.screenHeight() - 20)
 }
 function foodThingy () {
-    if (controller.A.isPressed() && leCook.tileKindAt(TileDirection.Top, assets.tile`myTile`)) {
-        onionOne = sprites.create(img`
-            . . . . d . . . . . . d . . . . 
-            . . . . d d . . . . d d . . . . 
-            . . . . . . d d d d . . . . . . 
-            . . . . . d d d d d d . . . . . 
-            . . . . d d b d d b d d . . . . 
-            . . . d d d b d d b d d d . . . 
-            . . . d d b d d d d b d d . . . 
-            . . d d d b d d d d b d d d . . 
-            . . d d d b d d d d b d d d . . 
-            . . d d b d d d d d d b d d . . 
-            . . d d b d d b b d d b d d . . 
-            . . d d b d d b b d d b d d . . 
-            . . d d b d d b b d d b d d . . 
-            . . d d b d d b b d d b d d . . 
-            . . d d b d d b b d d b d d . . 
-            . . . d b d d d d d d b d . . . 
-            `, SpriteKind.Food)
+    if (holdingTrue == 0 && (controller.A.isPressed() && leCook.tileKindAt(TileDirection.Top, assets.tile`myTile`))) {
+        onionOne = sprites.create(assets.image`Onion`, SpriteKind.Food)
+        tiles.placeOnTile(onionOne, tiles.getTileLocation(12, 10))
         onionOne.follow(leCook)
+        holdingTrue = 1
     }
 }
 let onionOne: Sprite = null
+let holdingTrue = 0
 let leCook: Sprite = null
+let levelStart = 0
+let rawIngredients: string[] = []
 let startButton: Sprite = null
 let initStart = 0
 startScreen()
 game.onUpdate(function () {
     scene.cameraFollowSprite(leCook)
     controller.moveSprite(leCook)
+    if (levelStart == 1) {
+        foodThingy()
+    }
 })

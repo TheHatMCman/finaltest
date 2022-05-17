@@ -16,13 +16,15 @@
         "README.md",
         "assets.json",
         "tilemap.g.jres",
-        "tilemap.g.ts"
+        "tilemap.g.ts",
+        "images.g.jres",
+        "images.g.ts"
     ],
     "testFiles": [
         "test.ts"
     ],
     "targetVersions": {
-        "target": "1.8.22",
+        "target": "1.8.23",
         "targetId": "arcade"
     },
     "supportedTargets": [

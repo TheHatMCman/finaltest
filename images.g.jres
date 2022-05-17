@@ -1,0 +1,17 @@
+{
+    "image1": {
+        "data": "hwQQABAAAAAAAPAPAAAAAADw7/4AAAAAAO/u/gAAAADw7u7+APD/AO/u7u7/v93/7+7u7r+73f3v7u7uv9vd/U/u7u6/2939T+7u7r/b3f1P5O7uv93d/U/u7u6/3d39T0Tu7v/f3f/w5O7+APD/AABP7v4AAAAAAPDv/gAAAAAAAPAPAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "mushRoom"
+    },
+    "image2": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAPD///8AAADw3929uw//AN/d3d27+9//3d29u8z839/du9vdvfvw3bvd3d29+/Dd3d3du8v88N3d3d27u/zw3bvd3d3d+9/f3bvb3d373//d3b27u/z/D9/d3d3d+wAA8N/d3d0PAAAA8P///wAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "Onion"
+    },
+    "*": {
+        "mimeType": "image/x-mkcd-f4",
+        "dataEncoding": "base64",
+        "namespace": "myImages"
+    }
+}
