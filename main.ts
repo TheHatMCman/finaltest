@@ -2,7 +2,33 @@ namespace SpriteKind {
     export const misc = SpriteKind.create()
     export const NPC = SpriteKind.create()
     export const potForSoup = SpriteKind.create()
+    export const ingredientForSoup = SpriteKind.create()
 }
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
+    if (initStart == 1) {
+        if (controller.A.isPressed() == (exposedFood == 1 && holdingTrue == 1)) {
+            onionOne.destroy()
+            potForSoup = sprites.create(img`
+                . . . . . . . . . . . . . . . . 
+                . . . . . . . . . . . . . . . . 
+                c c . . . . . . . . . . . . c c 
+                . c c b b b b b b b b b b c c . 
+                . . . b b b b b b b b b b . . . 
+                . . . b b b b b b b b b b . . . 
+                . . . b b b b b b b b b b . . . 
+                . . . c b b b b b b b b b . . . 
+                . . . c c b b b b b b b b . . . 
+                . . . c c b b b b b b b b . . . 
+                . . . c c c b b b b b b b . . . 
+                . . . c c c b b b b b b b . . . 
+                . . . c c c c b b b b b b . . . 
+                . . . c c c c c c c b b b . . . 
+                . . . c c c c c c c c c c . . . 
+                . . . . c c c c c c c c . . . . 
+                `, SpriteKind.potForSoup)
+        }
+    }
+})
 controller.combos.attachCombo("a + b", function () {
     if (initStart == 0) {
         mainFunc()
@@ -63,18 +89,21 @@ function startScreen () {
 }
 function foodThingy () {
     if (holdingTrue == 0 && (controller.A.isPressed() && leCook.tileKindAt(TileDirection.Top, assets.tile`myTile`))) {
-        onionOne = sprites.create(assets.image`Onion`, SpriteKind.Food)
+        onionOne = sprites.create(assets.image`Onion`, SpriteKind.ingredientForSoup)
         tiles.placeOnTile(onionOne, tiles.getTileLocation(12, 10))
         onionOne.follow(leCook)
         holdingTrue = 1
+        exposedFood = 1
     }
 }
-let onionOne: Sprite = null
-let holdingTrue = 0
 let leCook: Sprite = null
 let levelStart = 0
 let rawIngredients: string[] = []
 let startButton: Sprite = null
+let potForSoup: Sprite = null
+let onionOne: Sprite = null
+let holdingTrue = 0
+let exposedFood = 0
 let initStart = 0
 startScreen()
 game.onUpdate(function () {
