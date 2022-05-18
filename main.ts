@@ -8,7 +8,7 @@ namespace StatusBarKind {
     export const completion = StatusBarKind.create()
 }
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
-    if (initStart == 1) {
+    if (levelStart == 1) {
         numOfOnionInPot += 1
         if (controller.A.isPressed() == (exposedFood == 1 && holdingTrue == 1)) {
             onionOne.destroy()
@@ -49,10 +49,10 @@ function mainFunc () {
         . . . . f f f f f f f f . . . . 
         `, SpriteKind.Player)
     info.startCountdown(300)
-    tiles.placeOnTile(leCook, tiles.getTileLocation(10, 8))
+    tiles.placeOnTile(leCook, tiles.getTileLocation(11, 8))
     game.showLongText("Prepare to Make Good Food", DialogLayout.Bottom)
+    game.showLongText("Let's start with the basics! Start by grabbing an " + rawIngredients[0], DialogLayout.Bottom)
     foodThingy()
-    game.showLongText("Let's start with the basics! Start by grabbing an" + rawIngredients[0], DialogLayout.Bottom)
     potForSoup = sprites.create(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
@@ -105,6 +105,20 @@ function startScreen () {
     cookingTrue = 0
 }
 function foodThingy () {
+    if (levelStart == 1) {
+        if (holdingTrue == 0 && (controller.A.isPressed() && leCook.tileKindAt(TileDirection.Top, assets.tile`myTile`))) {
+            onionOne = sprites.create(assets.image`Onion`, SpriteKind.ingredientForSoup)
+            tiles.placeOnTile(onionOne, tiles.getTileLocation(12, 10))
+            onionOne.follow(leCook)
+            holdingTrue = 1
+            exposedFood = 1
+            tiles.setWallAt(tiles.getTileLocation(10, 5), false)
+            tiles.setWallAt(tiles.getTileLocation(10, 6), false)
+            tiles.setWallAt(tiles.getTileLocation(10, 7), false)
+            tiles.setWallAt(tiles.getTileLocation(10, 8), false)
+            game.showLongText("Now put the Onion in the pot above", DialogLayout.Bottom)
+        }
+    }
     if (holdingTrue == 0 && (controller.A.isPressed() && leCook.tileKindAt(TileDirection.Top, assets.tile`myTile`))) {
         onionOne = sprites.create(assets.image`Onion`, SpriteKind.ingredientForSoup)
         tiles.placeOnTile(onionOne, tiles.getTileLocation(12, 10))
@@ -116,21 +130,24 @@ function foodThingy () {
 let completeBar: StatusBarSprite = null
 let potForSoup: Sprite = null
 let leCook: Sprite = null
-let levelStart = 0
 let rawIngredients: string[] = []
 let startButton: Sprite = null
+let initStart = 0
 let cookingTrue = 0
 let onionOne: Sprite = null
 let holdingTrue = 0
 let exposedFood = 0
 let numOfOnionInPot = 0
-let initStart = 0
+let levelStart = 0
 startScreen()
 game.onUpdate(function () {
     scene.cameraFollowSprite(leCook)
     controller.moveSprite(leCook)
     if (levelStart == 1) {
         foodThingy()
+        if (completeBar.value == 100) {
+            game.showLongText("The Soup is Ready! Grab it and deliver it", DialogLayout.Bottom)
+        }
     }
 })
 game.onUpdateInterval(500, function () {
