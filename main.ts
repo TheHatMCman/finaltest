@@ -4,28 +4,17 @@ namespace SpriteKind {
     export const potForSoup = SpriteKind.create()
     export const ingredientForSoup = SpriteKind.create()
 }
+namespace StatusBarKind {
+    export const completion = StatusBarKind.create()
+}
 scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile6`, function (sprite, location) {
     if (initStart == 1) {
+        numOfOnionInPot += 1
         if (controller.A.isPressed() == (exposedFood == 1 && holdingTrue == 1)) {
             onionOne.destroy()
-            potForSoup = sprites.create(img`
-                . . . . . . . . . . . . . . . . 
-                . . . . . . . . . . . . . . . . 
-                c c . . . . . . . . . . . . c c 
-                . c c b b b b b b b b b b c c . 
-                . . . b b b b b b b b b b . . . 
-                . . . b b b b b b b b b b . . . 
-                . . . b b b b b b b b b b . . . 
-                . . . c b b b b b b b b b . . . 
-                . . . c c b b b b b b b b . . . 
-                . . . c c b b b b b b b b . . . 
-                . . . c c c b b b b b b b . . . 
-                . . . c c c b b b b b b b . . . 
-                . . . c c c c b b b b b b . . . 
-                . . . c c c c c c c b b b . . . 
-                . . . c c c c c c c c c c . . . 
-                . . . . c c c c c c c c . . . . 
-                `, SpriteKind.potForSoup)
+            cookingTrue = 1
+            holdingTrue = 0
+            exposedFood = 0
         }
     }
 })
@@ -37,6 +26,7 @@ controller.combos.attachCombo("a + b", function () {
     }
 })
 function mainFunc () {
+    numOfOnionInPot = 0
     rawIngredients = ["onion", "mushroom", "tomato"]
     levelStart = 1
     tiles.setCurrentTilemap(tilemap`level1`)
@@ -58,10 +48,36 @@ function mainFunc () {
         . . . . . . c c c c . . . . . . 
         . . . . f f f f f f f f . . . . 
         `, SpriteKind.Player)
-    game.showLongText("Make Good Food", DialogLayout.Bottom)
     info.startCountdown(300)
     tiles.placeOnTile(leCook, tiles.getTileLocation(10, 8))
+    game.showLongText("Prepare to Make Good Food", DialogLayout.Bottom)
     foodThingy()
+    game.showLongText("Let's start with the basics! Start by grabbing an" + rawIngredients[0], DialogLayout.Bottom)
+    potForSoup = sprites.create(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        c c . . . . . . . . . . . . c c 
+        . c c b b b b b b b b b b c c . 
+        . . . b b b b b b b b b b . . . 
+        . . . b b b b b b b b b b . . . 
+        . . . b b b b b b b b b b . . . 
+        . . . c b b b b b b b b b . . . 
+        . . . c c b b b b b b b b . . . 
+        . . . c c b b b b b b b b . . . 
+        . . . c c c b b b b b b b . . . 
+        . . . c c c b b b b b b b . . . 
+        . . . c c c c b b b b b b . . . 
+        . . . c c c c c c c b b b . . . 
+        . . . c c c c c c c c c c . . . 
+        . . . . c c c c c c c c . . . . 
+        `, SpriteKind.potForSoup)
+    tiles.placeOnTile(potForSoup, tiles.getTileLocation(7, 5))
+    completeBar = statusbars.create(20, 4, StatusBarKind.completion)
+    completeBar.setColor(2, 15)
+    completeBar.value = 0
+    completeBar.max = 100
+    completeBar.positionDirection(CollisionDirection.Top)
+    completeBar.attachToSprite(potForSoup)
 }
 function startScreen () {
     levelStart = 0
@@ -86,6 +102,7 @@ function startScreen () {
         `, SpriteKind.misc)
     scene.setBackgroundColor(4)
     startButton.setPosition(scene.screenWidth() / 2, scene.screenHeight() - 20)
+    cookingTrue = 0
 }
 function foodThingy () {
     if (holdingTrue == 0 && (controller.A.isPressed() && leCook.tileKindAt(TileDirection.Top, assets.tile`myTile`))) {
@@ -96,14 +113,17 @@ function foodThingy () {
         exposedFood = 1
     }
 }
+let completeBar: StatusBarSprite = null
+let potForSoup: Sprite = null
 let leCook: Sprite = null
 let levelStart = 0
 let rawIngredients: string[] = []
 let startButton: Sprite = null
-let potForSoup: Sprite = null
+let cookingTrue = 0
 let onionOne: Sprite = null
 let holdingTrue = 0
 let exposedFood = 0
+let numOfOnionInPot = 0
 let initStart = 0
 startScreen()
 game.onUpdate(function () {
@@ -111,5 +131,10 @@ game.onUpdate(function () {
     controller.moveSprite(leCook)
     if (levelStart == 1) {
         foodThingy()
+    }
+})
+game.onUpdateInterval(500, function () {
+    if (cookingTrue == 1) {
+        completeBar.value += 2
     }
 })
