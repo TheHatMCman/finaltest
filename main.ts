@@ -25,7 +25,22 @@ controller.combos.attachCombo("a + b", function () {
         startButton.destroy()
     }
 })
+function customerOrders (potentialIngredients: any[]) {
+    rngMachine = randint(0, 1000)
+    if (rngMachine < 465 && rngMachine < 475) {
+        let listOfOrders: any[] = []
+        tempOrder = potentialIngredients[randint(0, potentialIngredients.length)]
+        listOfOrders.push(tempOrder)
+    }
+}
+sprites.onOverlap(SpriteKind.Player, SpriteKind.potForSoup, function (sprite, otherSprite) {
+    if (grabbableTrue == 1) {
+        otherSprite.follow(sprite)
+    }
+})
 function mainFunc () {
+    grabbableTrue = 0
+    potFinish = 0
     numOfOnionInPot = 0
     rawIngredients = ["onion", "mushroom", "tomato"]
     levelStart = 1
@@ -48,7 +63,7 @@ function mainFunc () {
         . . . . . . c c c c . . . . . . 
         . . . . f f f f f f f f . . . . 
         `, SpriteKind.Player)
-    info.startCountdown(300)
+    info.startCountdown(120)
     tiles.placeOnTile(leCook, tiles.getTileLocation(11, 8))
     game.showLongText("Prepare to Make Good Food", DialogLayout.Bottom)
     game.showLongText("Let's start with the basics! Start by grabbing an " + rawIngredients[0], DialogLayout.Bottom)
@@ -131,6 +146,10 @@ let completeBar: StatusBarSprite = null
 let potForSoup: Sprite = null
 let leCook: Sprite = null
 let rawIngredients: string[] = []
+let potFinish = 0
+let grabbableTrue = 0
+let tempOrder: any = null
+let rngMachine = 0
 let startButton: Sprite = null
 let initStart = 0
 let cookingTrue = 0
@@ -145,9 +164,14 @@ game.onUpdate(function () {
     controller.moveSprite(leCook)
     if (levelStart == 1) {
         foodThingy()
-        if (completeBar.value == 100) {
-            game.showLongText("The Soup is Ready! Grab it and deliver it", DialogLayout.Bottom)
+        if (potFinish == 0 && completeBar.value == 100) {
+            game.showLongText("The Soup is Ready! Grab it and deliver it!", DialogLayout.Bottom)
+            potFinish = 1
+            grabbableTrue = 1
+            tiles.placeOnTile(potForSoup, tiles.getTileLocation(7, 6))
         }
+    } else if (levelStart == 2) {
+        customerOrders(rawIngredients)
     }
 })
 game.onUpdateInterval(500, function () {
