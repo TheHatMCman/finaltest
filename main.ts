@@ -31,11 +31,13 @@ function customerOrders (potentialIngredients: any[]) {
         let listOfOrders: any[] = []
         tempOrder = potentialIngredients[randint(0, potentialIngredients.length)]
         listOfOrders.push(tempOrder)
+        newOrderCreate = 1
     }
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.potForSoup, function (sprite, otherSprite) {
     if (grabbableTrue == 1) {
-        otherSprite.follow(sprite)
+        holdingTrue = 1
+        otherSprite.follow(sprite, 100)
     }
 })
 function mainFunc () {
@@ -268,7 +270,6 @@ function foodThingy () {
             onionOne.follow(leCook)
             holdingTrue = 1
             exposedFood = 1
-            tiles.setWallAt(tiles.getTileLocation(10, 5), false)
             tiles.setWallAt(tiles.getTileLocation(10, 6), false)
             tiles.setWallAt(tiles.getTileLocation(10, 7), false)
             tiles.setWallAt(tiles.getTileLocation(10, 8), false)
@@ -290,6 +291,7 @@ let leCook: Sprite = null
 let rawIngredients: string[] = []
 let potFinish = 0
 let grabbableTrue = 0
+let newOrderCreate = 0
 let tempOrder: any = null
 let rngMachine = 0
 let startButton: Sprite = null
@@ -312,12 +314,26 @@ game.onUpdate(function () {
             grabbableTrue = 1
             tiles.placeOnTile(potForSoup, tiles.getTileLocation(7, 6))
         }
+        if (grabbableTrue == 1 && holdingTrue == 1 && (controller.A.isPressed() && potForSoup.tileKindAt(TileDirection.Bottom, assets.tile`tileFloor`))) {
+            tiles.placeOnTile(potForSoup, tiles.getTileLocation(7, 5))
+            holdingTrue = 0
+            potForSoup.follow(leCook, 0)
+        }
     } else if (levelStart == 2) {
         customerOrders(rawIngredients)
     }
 })
-game.onUpdateInterval(500, function () {
+game.onUpdateInterval(10, function () {
+    if (initStart == 1) {
+        if (rngMachine < 465 && rngMachine < 475) {
+            leCook.sayText("New Order for " + tempOrder + " soup.", 100, true)
+            newOrderCreate = 0
+        }
+    }
+})
+game.onUpdateInterval(200, function () {
     if (cookingTrue == 1) {
         completeBar.value += 2
+        console.log(tempOrder)
     }
 })
