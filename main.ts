@@ -29,7 +29,7 @@ function customerOrders (potentialIngredients: any[]) {
     rngMachine = randint(0, 1000)
     if (rngMachine < 465 && rngMachine < 475) {
         let listOfOrders: any[] = []
-        tempOrder = potentialIngredients[randint(0, potentialIngredients.length)]
+        tempOrder = potentialIngredients._pickRandom()
         listOfOrders.push(tempOrder)
         newOrderCreate = 1
     }
@@ -271,8 +271,11 @@ function foodThingy () {
             holdingTrue = 1
             exposedFood = 1
             tiles.setWallAt(tiles.getTileLocation(10, 6), false)
+            tiles.setTileAt(tiles.getTileLocation(10, 6), assets.tile`table`)
             tiles.setWallAt(tiles.getTileLocation(10, 7), false)
+            tiles.setTileAt(tiles.getTileLocation(10, 7), assets.tile`tileFloor`)
             tiles.setWallAt(tiles.getTileLocation(10, 8), false)
+            tiles.setTileAt(tiles.getTileLocation(10, 8), assets.tile`tileFloor`)
             game.showLongText("Now put the Onion in the pot above", DialogLayout.Bottom)
         }
     }

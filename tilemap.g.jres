@@ -94,6 +94,12 @@
         "tilemapTile": true,
         "displayName": "myTile2"
     },
+    "tile16": {
+        "data": "hwQQABAAAADu7u7u7u7u7u7k7u7u7u7u7uTuTkREROTu5O7uRERE5O7kTu5ORETk7uRO5E5EROTu5E7k7kRE5O7kTkTuTkTkTu5OROTuRORO7k5ERO5O5E7uTkRE5O7kTu5ORERE7uRO7k5ERETu7k7uTkREROTuTu7u7u7u7u7u7u7u7u7u7g==",
+        "mimeType": "image/x-mkcd-f4",
+        "tilemapTile": true,
+        "displayName": "tileFloor0"
+    },
     "level2": {
         "id": "level2",
         "mimeType": "application/mkcd-tilemap",
@@ -120,7 +126,8 @@
             "myTiles.tile14",
             "myTiles.tile5",
             "myTiles.tile7",
-            "myTiles.tile15"
+            "myTiles.tile15",
+            "myTiles.tile16"
         ],
         "displayName": "level1"
     },
