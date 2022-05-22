@@ -39,6 +39,9 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.potForSoup, function (sprite, ot
         otherSprite.follow(sprite, 100)
     }
 })
+info.onCountdownEnd(function () {
+    game.showLongText("", DialogLayout.Bottom)
+})
 function mainFunc () {
     grabbableTrue = 0
     potFinish = 0
@@ -296,7 +299,24 @@ function foodThingy () {
         } else if (tempGeneral == rawIngredients[1]) {
             foodOne = sprites.create(assets.image`mushRoom`, SpriteKind.ingredientForSoup)
         } else {
-        	
+            foodOne = sprites.create(img`
+                . . . . f f f f f f f f . . . . 
+                . . . . f 7 7 f f 7 7 f . . . . 
+                . . . f f f f f f f f f f . . . 
+                . . f 2 2 2 2 2 2 2 2 2 2 f . . 
+                . f 2 2 2 2 2 2 2 2 1 1 2 2 f . 
+                . f 2 2 2 2 2 2 2 2 2 2 1 2 f . 
+                f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
+                f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
+                f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
+                f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
+                f 2 2 2 2 2 2 2 2 2 2 2 2 2 2 f 
+                f e 2 e 2 2 2 2 2 2 2 2 2 2 2 f 
+                f e e 2 e 2 2 2 2 2 2 2 2 2 2 f 
+                . f e e 2 e 2 e 2 2 e 2 2 2 f . 
+                . . f e e e e e e e e e e f . . 
+                . . . f f f f f f f f f f . . . 
+                `, SpriteKind.ingredientForSoup)
         }
         tiles.placeOnTile(foodOne, tiles.getTileLocation(12, 10))
         foodOne.follow(leCook)
@@ -320,6 +340,11 @@ scene.onOverlapTile(SpriteKind.potForSoup, assets.tile`checkOut`, function (spri
     }
     if (controller.B.isPressed()) {
         if (completeBar.value == 1000) {
+            if (tutorText[2] == 0) {
+                game.showLongText("Now just repeat this until time runs out", DialogLayout.Bottom)
+                tutorText[2] = 1
+            }
+            numberOfSuccessfulDeliveries += 1
             info.changeScoreBy(100)
             completeBar.value = 0
             potPosition(0)
@@ -355,7 +380,8 @@ let holdingTrue = 0
 let exposedFood = 0
 let listOfOrders: any[] = []
 let tutorText: number[] = []
-tutorText = [0, 0]
+let numberOfSuccessfulDeliveries = 0
+tutorText = [0, 0, 0]
 listOfOrders = []
 startScreen()
 game.onUpdate(function () {
@@ -369,6 +395,7 @@ game.onUpdate(function () {
             potPosition(1)
             if (tutorText[0] == 0) {
                 game.showLongText("The Soup is Ready! Grab it and deliver it!", DialogLayout.Bottom)
+                game.showLongText("Make sure to not hit \"B\" before reaching the delivery zone!", DialogLayout.Bottom)
                 tutorText[0] = 1
             }
         }
