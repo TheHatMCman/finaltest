@@ -26,12 +26,14 @@ controller.combos.attachCombo("a + b", function () {
     }
 })
 function customerOrders (potentialIngredients: any[]) {
+    let list: number[] = []
     rngMachine = randint(0, 1000)
-    if (rngMachine < 465 && rngMachine < 475) {
-        let listOfOrders: any[] = []
-        tempOrder = potentialIngredients._pickRandom()
-        listOfOrders.push(tempOrder)
-        newOrderCreate = 1
+    while (list.length <= 4) {
+        if (rngMachine < 470 && rngMachine < 475) {
+            tempOrder = potentialIngredients._pickRandom()
+            listOfOrders.push(tempOrder)
+            newOrderCreate = 1
+        }
     }
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.potForSoup, function (sprite, otherSprite) {
@@ -305,6 +307,8 @@ let holdingTrue = 0
 let exposedFood = 0
 let numOfOnionInPot = 0
 let levelStart = 0
+let listOfOrders: any[] = []
+listOfOrders = []
 startScreen()
 game.onUpdate(function () {
     scene.cameraFollowSprite(leCook)
@@ -327,7 +331,7 @@ game.onUpdate(function () {
     }
 })
 game.onUpdateInterval(10, function () {
-    if (initStart == 1) {
+    if (initStart == 2) {
         if (rngMachine < 465 && rngMachine < 475) {
             leCook.sayText("New Order for " + tempOrder + " soup.", 100, true)
             newOrderCreate = 0
