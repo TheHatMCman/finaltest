@@ -289,6 +289,14 @@ function foodThingy () {
         exposedFood = 1
     }
 }
+scene.onOverlapTile(SpriteKind.potForSoup, assets.tile`checkOut`, function (sprite, location) {
+    if (controller.A.isPressed()) {
+        if (completeBar.value == 100) {
+            info.changeScoreBy(100)
+            completeBar.value = 0
+        }
+    }
+})
 let logoSpeedCooked: Sprite = null
 let completeBar: StatusBarSprite = null
 let potForSoup: Sprite = null
@@ -317,14 +325,21 @@ game.onUpdate(function () {
         foodThingy()
         if (potFinish == 0 && completeBar.value == 100) {
             game.showLongText("The Soup is Ready! Grab it and deliver it!", DialogLayout.Bottom)
+            cookingTrue = 0
             potFinish = 1
             grabbableTrue = 1
             tiles.placeOnTile(potForSoup, tiles.getTileLocation(7, 6))
         }
-        if (grabbableTrue == 1 && holdingTrue == 1 && (controller.A.isPressed() && potForSoup.tileKindAt(TileDirection.Bottom, assets.tile`tileFloor`))) {
-            tiles.placeOnTile(potForSoup, tiles.getTileLocation(7, 5))
-            holdingTrue = 0
-            potForSoup.follow(leCook, 0)
+        if (grabbableTrue == 1 && holdingTrue == 1 && (controller.A.isPressed() && (potForSoup.tileKindAt(TileDirection.Bottom, assets.tile`tileFloor`) || potForSoup.tileKindAt(TileDirection.Top, assets.tile`tileFloor`)))) {
+            if (completeBar.value == 100) {
+                game.splash("You spilled the soup")
+                info.startCountdown(0)
+            } else {
+                tiles.placeOnTile(potForSoup, tiles.getTileLocation(7, 5))
+                holdingTrue = 0
+                cookingTrue = 0
+                potForSoup.follow(leCook, 0)
+            }
         }
     } else if (levelStart == 2) {
         customerOrders(rawIngredients)
