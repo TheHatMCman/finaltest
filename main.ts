@@ -410,7 +410,7 @@ game.onUpdate(function () {
             potPosition(1)
             if (tutorText[0] == 0) {
                 game.showLongText("The Soup is Ready! Grab it and deliver it!", DialogLayout.Bottom)
-                game.showLongText("Make sure to not hit \"B\" before reaching the delivery zone!", DialogLayout.Bottom)
+                game.showLongText("Make sure to not hit \"B\" before the pot reaches the delivery zone or else you lose!!!", DialogLayout.Bottom)
                 tutorText[0] = 1
             }
         }
