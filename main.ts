@@ -40,13 +40,18 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.potForSoup, function (sprite, ot
     }
 })
 info.onCountdownEnd(function () {
-    if (numberOfSuccessfulDeliveries < 5) {
+    if (numberOfSuccessfulDeliveries < 7) {
         game.showLongText("You only made " + numberOfSuccessfulDeliveries + " " + tempGeneral + " soups...", DialogLayout.Bottom)
-        game.showLongText("and the customers were disappointed...", DialogLayout.Bottom)
+        game.showLongText("and the customers were disappointed..." + ":(", DialogLayout.Bottom)
         game.over(false, effects.slash)
-    } else {
+    } else if (numberOfSuccessfulDeliveries >= 7 && numberOfSuccessfulDeliveries < 30) {
         game.showLongText("Congratulations on finishing the game! You were able to make " + numberOfSuccessfulDeliveries + " " + tempGeneral + " soups", DialogLayout.Bottom)
+        game.showLongText("The customers were satisfied. :)", DialogLayout.Bottom)
         game.over(true, effects.confetti)
+    } else if (numberOfSuccessfulDeliveries >= 30) {
+        game.showLongText("Congratulations on finishing the game! You were able to make " + numberOfSuccessfulDeliveries + " " + tempGeneral + " soups", DialogLayout.Bottom)
+        game.showLongText("The customers very impressed and await for your return! :D", DialogLayout.Bottom)
+        game.over(true, effects.smiles)
     }
 })
 function mainFunc () {
@@ -348,9 +353,9 @@ scene.onOverlapTile(SpriteKind.potForSoup, assets.tile`checkOut`, function (spri
     if (controller.B.isPressed()) {
         if (completeBar.value == 1000) {
             if (tutorText[2] == 0) {
-                game.showLongText("Now just repeat this until time runs out! Try to deliver at least 5 soups!", DialogLayout.Bottom)
+                game.showLongText("Now just repeat this until time runs out! Try to deliver at least 7 soups!", DialogLayout.Bottom)
                 game.splash("Tutorial Complete!", "\"Now continue young chef!\"")
-                info.startCountdown(360)
+                info.startCountdown(240)
                 tutorText[2] = 1
             }
             numberOfSuccessfulDeliveries += 1
