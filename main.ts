@@ -40,7 +40,14 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.potForSoup, function (sprite, ot
     }
 })
 info.onCountdownEnd(function () {
-    game.showLongText("", DialogLayout.Bottom)
+    if (numberOfSuccessfulDeliveries < 5) {
+        game.showLongText("You only made " + numberOfSuccessfulDeliveries + " " + tempGeneral + " soups...", DialogLayout.Bottom)
+        game.showLongText("and the customers were disappointed...", DialogLayout.Bottom)
+        game.over(false, effects.slash)
+    } else {
+        game.showLongText("Congratulations on finishing the game! You were able to make " + numberOfSuccessfulDeliveries + " " + tempGeneral + " soups", DialogLayout.Bottom)
+        game.over(true, effects.confetti)
+    }
 })
 function mainFunc () {
     grabbableTrue = 0
@@ -293,7 +300,7 @@ function theActualCookin () {
     }
 }
 function foodThingy () {
-    if (holdingTrue == 0 && (controller.A.isPressed() && leCook.tileKindAt(TileDirection.Top, assets.tile`myTile`))) {
+    if (holdingTrue == 0 && (controller.A.isPressed() && leCook.tileKindAt(TileDirection.Top, assets.tile`myTile5`))) {
         if (tempGeneral == rawIngredients[0]) {
             foodOne = sprites.create(assets.image`Onion`, SpriteKind.ingredientForSoup)
         } else if (tempGeneral == rawIngredients[1]) {
@@ -329,7 +336,7 @@ function foodThingy () {
             tiles.setTileAt(tiles.getTileLocation(10, 7), assets.tile`tileFloor`)
             tiles.setWallAt(tiles.getTileLocation(10, 8), false)
             tiles.setTileAt(tiles.getTileLocation(10, 8), assets.tile`tileFloor`)
-            game.showLongText("Now put the Onion in the pot above", DialogLayout.Bottom)
+            game.showLongText("Now put the " + tempGeneral + " in the pot above", DialogLayout.Bottom)
         }
     }
 }
@@ -341,7 +348,9 @@ scene.onOverlapTile(SpriteKind.potForSoup, assets.tile`checkOut`, function (spri
     if (controller.B.isPressed()) {
         if (completeBar.value == 1000) {
             if (tutorText[2] == 0) {
-                game.showLongText("Now just repeat this until time runs out", DialogLayout.Bottom)
+                game.showLongText("Now just repeat this until time runs out! Try to deliver at least 5 soups!", DialogLayout.Bottom)
+                game.splash("Tutorial Complete!", "\"Now continue young chef!\"")
+                info.startCountdown(360)
                 tutorText[2] = 1
             }
             numberOfSuccessfulDeliveries += 1
@@ -362,12 +371,12 @@ function potPosition (num: number) {
 let logoSpeedCooked: Sprite = null
 let completeBar: StatusBarSprite = null
 let potForSoup: Sprite = null
-let tempGeneral = ""
 let leCook: Sprite = null
 let levelStart = 0
 let rawIngredients: string[] = []
 let numOfOnionInPot = 0
 let potFinish = 0
+let tempGeneral = ""
 let grabbableTrue = 0
 let newOrderCreate = 0
 let tempOrder: any = null
@@ -381,6 +390,7 @@ let exposedFood = 0
 let listOfOrders: any[] = []
 let tutorText: number[] = []
 let numberOfSuccessfulDeliveries = 0
+numberOfSuccessfulDeliveries = 0
 tutorText = [0, 0, 0]
 listOfOrders = []
 startScreen()
